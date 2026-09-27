@@ -130,3 +130,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_admin" {
   role       = aws_iam_role.codebuild.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+
+provider "aws" {
+  region = var.region # Or your preferred region
+}
