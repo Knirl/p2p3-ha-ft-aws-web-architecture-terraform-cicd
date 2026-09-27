@@ -39,7 +39,7 @@ private_subnet_cidrs = ["10.0.11.0/24", "10.0.12.0/24"]
 # Costs real money per hour + data processing while on. Needed if compute
 # should have outbound internet access (e.g. package installs, SSM).
 
-enable_nat_gateway = false
+enable_nat_gateway = true
 
 # ---------------------------------------------------------------------------
 # KMS
