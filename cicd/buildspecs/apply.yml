@@ -1,47 +1,21 @@
 version: 0.2
 
-# ---------------------------------------------------------------------------
-# Runs after the manual approval gate. Receives the Plan stage's full
-# output artifact as its input — including tfplan itself and every .tf
-# file it was generated against — via CodePipeline's own artifact passing,
-# not anything configured in this file.
-# ---------------------------------------------------------------------------
-
 phases:
   install:
     commands:
-      - echo "Installing Terraform..."
-      # Ensure unzip and curl are installed
-      - apt-get update && apt-get install -y unzip curl
-
-      # using -fL (fails immediately on 404/HTTP errors)
-      - curl -fLO https://releases.hashicorp.com/terraform/1.15.6/terraform_1.15.6_linux_amd64.zip
-
-      # Unzip and move to executable PATH
-      - nzip -o terraform_1.15.6_linux_amd64.zip
+      - echo "Installing Terraform 1.10.0..."
+      - curl -fLO https://releases.hashicorp.com/terraform/1.10.0/terraform_1.10.0_linux_amd64.zip
+      - unzip -o terraform_1.10.0_linux_amd64.zip
       - mv terraform /usr/local/bin/
-
-      # clean up zip
-      - rm terraform_1.15.6_linux_amd64.zip
-      
+      - rm terraform_1.10.0_linux_amd64.zip
       - terraform -version
 
   pre_build:
     commands:
-      # Re-running init here (rather than reusing a cached .terraform/ dir
-      # from the Plan stage) is deliberate: it's idempotent, avoids
-      # shipping a potentially large provider-plugin cache through the
-      # pipeline artifact bucket, and confirms the backend/providers are
-      # still reachable right before the real, infrastructure-changing
-      # step runs.
       - echo "Initializing Terraform..."
       - terraform init -input=false
 
   build:
     commands:
-      # Applying the FILE (tfplan) rather than running `terraform apply`
-      # fresh is what guarantees this stage does exactly what was reviewed
-      # at the approval gate — no new plan is computed here, no chance of
-      # something changing in AWS between approval and apply and silently
-      # altering what gets built.
+      - echo "Applying Terraform Plan..."
       - terraform apply -input=false tfplan
