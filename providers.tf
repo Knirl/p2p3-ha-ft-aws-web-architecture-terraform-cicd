@@ -24,8 +24,8 @@ terraform {
   # Bucker below create
 
   backend "s3" {
-    bucket       = "project2v2-tfstate-amboy"
-    key          = "project2-v2/terraform.tfstate"
+    bucket       = "p2p3-tfstate-amboy"
+    key          = "p2p3/terraform.tfstate"
     region       = "ap-southeast-1"
     encrypt      = true
     use_lockfile = true
