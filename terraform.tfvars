@@ -23,7 +23,7 @@ alert_email  = "your-email@example.com" # AWS sends a confirmation link here aft
 # Identity / region
 # ---------------------------------------------------------------------------
 
-environment = "dev"            # dev | staging | prod
+environment = "prod"            # dev | staging | prod
 region      = "ap-southeast-1" # Singapore
 
 # ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ db_name                        = "p2v2db"
 db_master_username             = "admin" # password is always generated, never set here
 db_backup_retention_period     = 7
 db_deletion_protection         = false
-secret_recovery_window_in_days = 0 # 0 = immediate delete, fine for dev
+secret_recovery_window_in_days = 0 # 0 = immediate delete
 
 # Roughly doubles RDS cost — turn on to actually exercise failover.
 rds_multi_az = true

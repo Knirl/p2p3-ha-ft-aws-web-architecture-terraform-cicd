@@ -16,7 +16,7 @@ variable "project_name" {
 variable "environment" {
   description = "Deployment environment. Controls several safety-vs-convenience defaults elsewhere (e.g. database's skip_final_snapshot is tied to this being \"prod\" or not)."
   type        = string
-  default     = "dev"
+  default     = "prod"
 
   validation {
     condition     = contains(["dev", "staging", "prod"], var.environment)
