@@ -193,7 +193,7 @@ resource "aws_codepipeline" "pipeline" {
 
       configuration = {
         NotificationArn = aws_sns_topic.approval.arn
-        CustomMessage   = "A new infrastructure change is ready for review. Check the CodeBuild plan output before approving."
+        CustomData   = "A new infrastructure change is ready for review. Check the CodeBuild plan output before approving."
       }
     }
   }

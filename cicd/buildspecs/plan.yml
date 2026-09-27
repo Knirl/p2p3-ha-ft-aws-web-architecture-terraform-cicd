@@ -22,6 +22,14 @@ version: 0.2
 phases:
   install:
     commands:
+
+    # Install tfenv or download Terraform directly
+      - echo "Installing Terraform..."
+      - curl -s -O https://releases.hashicorp.com/terraform/1.15.6/terraform_1.15.6_linux_amd64.zip
+      - unzip -o terraform_1.15.6_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+      - terraform -version
+
       # Sanity check only — confirms the image actually has Terraform,
       # rather than silently failing later with a confusing error.
       - terraform -version
@@ -31,6 +39,7 @@ phases:
       # -input=false everywhere: CodeBuild has no interactive terminal: any
       # command that might prompt for input (a missing required variable,
       # for example) would otherwise hang until the build times out.
+      - echo "Initializing Terraform..."
       - terraform init -input=false
 
   build:
@@ -39,6 +48,7 @@ phases:
       # is what lets the Apply stage apply the EXACT plan that was
       # reviewed at the manual approval gate, rather than re-planning and
       # risking drift between what was approved and what actually runs.
+      - echo "Running Terraform Plan..."
       - terraform plan -out=tfplan -input=false
 
 # ---------------------------------------------------------------------------
@@ -51,4 +61,5 @@ phases:
 
 artifacts:
   files:
+    - tfplan
     - '**/*'

@@ -10,6 +10,10 @@ version: 0.2
 phases:
   install:
     commands:
+      - echo "Installing Terraform..."
+      - curl -s -O https://releases.hashicorp.com/terraform/1.6.6/terraform_1.15.6_linux_amd64.zip
+      - unzip -o terraform_1.15.6_linux_amd64.zip
+      - mv terraform /usr/local/bin/
       - terraform -version
 
   pre_build:
@@ -20,6 +24,7 @@ phases:
       # pipeline artifact bucket, and confirms the backend/providers are
       # still reachable right before the real, infrastructure-changing
       # step runs.
+      - echo "Initializing Terraform..."
       - terraform init -input=false
 
   build:
