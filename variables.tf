@@ -27,7 +27,7 @@ variable "environment" {
 variable "region" {
   description = "AWS region to deploy into. Used by the provider block in providers.tf, not passed to any module directly — resources inherit it automatically from the provider configuration."
   type        = string
-  default     = "us-east-1"
+  default     = "ap-southeast-1"
 }
 
 # ---------------------------------------------------------------------------

@@ -1,0 +1,54 @@
+version: 0.2
+
+# ---------------------------------------------------------------------------
+# This buildspec runs inside a CodeBuild project using the official
+# hashicorp/terraform Docker image (set on the CodeBuild PROJECT resource
+# itself, not here) — Terraform is already present in that image, so this
+# buildspec never needs to install it.
+#
+# Working directory: the repo ROOT, not /cicd. This project's app
+# infrastructure (main.tf, modules/, etc.) lives directly at repo root —
+# /cicd only contains the pipeline's OWN separate Terraform config, which
+# this buildspec never touches. Terraform's root module only reads .tf
+# files directly in the given directory (not subfolders like /cicd), so
+# there's no conflict or need to explicitly exclude anything.
+#
+# Authentication: terraform's aws provider picks up credentials
+# automatically from CodeBuild's own execution role (the standard AWS
+# credential chain) — no aws configure or access keys needed anywhere in
+# this file.
+# ---------------------------------------------------------------------------
+
+phases:
+  install:
+    commands:
+      # Sanity check only — confirms the image actually has Terraform,
+      # rather than silently failing later with a confusing error.
+      - terraform -version
+
+  pre_build:
+    commands:
+      # -input=false everywhere: CodeBuild has no interactive terminal: any
+      # command that might prompt for input (a missing required variable,
+      # for example) would otherwise hang until the build times out.
+      - terraform init -input=false
+
+  build:
+    commands:
+      # Saves the plan to a file (tfplan) instead of just printing it. This
+      # is what lets the Apply stage apply the EXACT plan that was
+      # reviewed at the manual approval gate, rather than re-planning and
+      # risking drift between what was approved and what actually runs.
+      - terraform plan -out=tfplan -input=false
+
+# ---------------------------------------------------------------------------
+# Artifacts: capture EVERYTHING in the build directory, not just tfplan.
+# The Apply stage needs the full source (.tf files, modules/) to run its
+# own `terraform init` again — CodePipeline passes this stage's artifact
+# as the Apply stage's input automatically, so nothing extra needs wiring
+# here beyond listing what to include.
+# ---------------------------------------------------------------------------
+
+artifacts:
+  files:
+    - '**/*'

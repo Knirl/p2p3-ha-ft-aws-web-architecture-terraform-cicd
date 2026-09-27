@@ -1,0 +1,32 @@
+version: 0.2
+
+# ---------------------------------------------------------------------------
+# Runs after the manual approval gate. Receives the Plan stage's full
+# output artifact as its input — including tfplan itself and every .tf
+# file it was generated against — via CodePipeline's own artifact passing,
+# not anything configured in this file.
+# ---------------------------------------------------------------------------
+
+phases:
+  install:
+    commands:
+      - terraform -version
+
+  pre_build:
+    commands:
+      # Re-running init here (rather than reusing a cached .terraform/ dir
+      # from the Plan stage) is deliberate: it's idempotent, avoids
+      # shipping a potentially large provider-plugin cache through the
+      # pipeline artifact bucket, and confirms the backend/providers are
+      # still reachable right before the real, infrastructure-changing
+      # step runs.
+      - terraform init -input=false
+
+  build:
+    commands:
+      # Applying the FILE (tfplan) rather than running `terraform apply`
+      # fresh is what guarantees this stage does exactly what was reviewed
+      # at the approval gate — no new plan is computed here, no chance of
+      # something changing in AWS between approval and apply and silently
+      # altering what gets built.
+      - terraform apply -input=false tfplan
