@@ -98,3 +98,35 @@ resource "aws_codebuild_project" "apply" {
     Name = "${local.name}-apply"
   })
 }
+
+# ---------------------------------------------------------------------------
+# CodeBuild Execution IAM Role & Policy
+# ---------------------------------------------------------------------------
+
+data "aws_iam_policy_document" "codebuild_assume_role" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["codebuild.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "codebuild" {
+  name               = "${local.name}-codebuild-role"
+  assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role.json
+
+  tags = merge(var.tags, {
+    Name = "${local.name}-codebuild-role"
+  })
+}
+
+# Attach AdministratorAccess (or specific required permissions) so CodeBuild
+# can run Terraform plan/apply against your AWS resources.
+resource "aws_iam_role_policy_attachment" "codebuild_admin" {
+  role       = aws_iam_role.codebuild.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
