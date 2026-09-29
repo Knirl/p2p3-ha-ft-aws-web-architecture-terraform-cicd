@@ -3,8 +3,7 @@
 A 3-tier web application (ALB → ASG of EC2 → RDS MySQL) built entirely with modular,
 parameterized Terraform. This is the third iteration of this project:
 
-- **v0** — built manually in the AWS Management Console
-- **v1** — rebuilt in Terraform, but everything hardcoded in one flat configuration
+- **v1** Terraform, but everything hardcoded in one flat configuration
 - **v2** (this version) — rebuilt again as 8 composable modules with variables,
   validation, conditional logic, and a decoupled root wiring layer
 

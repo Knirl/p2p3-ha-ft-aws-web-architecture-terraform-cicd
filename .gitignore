@@ -5,7 +5,6 @@
 # inside, not just files sitting directly at the top level.
 # ---------------------------------------------------------------------------
 .terraform/
-screenshots/
 # ---------------------------------------------------------------------------
 # State files. Even with a remote S3 backend configured, a local .tfstate
 # can still appear (e.g. before backend migration, or from `terraform
