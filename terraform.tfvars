@@ -23,7 +23,7 @@ alert_email  = "your-email@example.com" # AWS sends a confirmation link here aft
 # Identity / region
 # ---------------------------------------------------------------------------
 
-environment = "prod"            # dev | staging | prod
+environment = "dev"            # dev | staging | prod
 region      = "ap-southeast-1" # Singapore
 
 # ---------------------------------------------------------------------------

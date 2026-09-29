@@ -120,3 +120,8 @@ email before alarms will actually deliver.
   drafts of the design notes referenced K8s-style subnet discovery tags that
   don't apply to this plain EC2/ASG/ALB architecture, and were removed).
 - No SSH access path, by design — see **No SSH, no bastion host** above.
+
+
+# Project 3: Automated CI/CD Deployment Pipeline using AWS Developer Tools with Terraform
+
+CI/CD Deployment Pipeline of project 2 -- In progress -- Debugging
