@@ -13,7 +13,7 @@ variable "project_name" {
 variable "environment" {
   description = "Deployment environment (e.g. dev, staging, prod)."
   type        = string
-  default     = "prod"
+  default     = "dev"
 }
 
 variable "codebuild_compute_type" {

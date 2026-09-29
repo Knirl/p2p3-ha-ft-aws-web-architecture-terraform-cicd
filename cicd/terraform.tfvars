@@ -6,4 +6,4 @@ code_connection_arn = "arn:aws:codeconnections:ap-southeast-1:109375139212:conne
 
 github_branch = "main"
 github_repository_id = "Knirl/p2p3-ha-ft-aws-web-architecture-terraform-cicd"
-approval_email = "amboymacrian@gmail.com"
+approval_email = "youremail@example.com"
