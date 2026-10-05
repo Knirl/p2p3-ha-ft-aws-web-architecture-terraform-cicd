@@ -124,4 +124,4 @@ email before alarms will actually deliver.
 
 # Project 3: Automated CI/CD Deployment Pipeline using AWS Developer Tools with Terraform
 
-CI/CD Deployment Pipeline of project 2 -- In progress -- Debugging
+CI/CD Deployment Pipeline of project 2 -- Currently Applying Fixes
