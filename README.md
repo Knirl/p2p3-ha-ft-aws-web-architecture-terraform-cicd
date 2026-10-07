@@ -1,11 +1,6 @@
-# Project 2 — v2: Modular Terraform on AWS
+# Project 2 — v2: Infrastructure as Code with Terraform
 
-A 3-tier web application (ALB → ASG of EC2 → RDS MySQL) built entirely with modular,
-parameterized Terraform. This is the third iteration of this project:
-
-- **v1** Terraform, but everything hardcoded in one flat configuration
-- **v2** (this version) — rebuilt again as 8 composable modules with variables,
-  validation, conditional logic, and a decoupled root wiring layer
+Project 2 (v2) is a modular AWS cloud setup built using Terraform. After starting with a basic prototype to learn the fundamentals, this system is refactored into clean, reusable modules for networking, compute, database, and security. Main focus is practicing production standards ensuring high availability across multiple availability zones, enforcing encryption at rest, and setting up remote state locking, together with other improvements.
 
 ## Architecture
 
@@ -39,11 +34,6 @@ anywhere. Access is via AWS Systems Manager Session Manager, using an IAM role
 (`AmazonSSMManagedInstanceCore`) instead of a key file. Requires `enable_nat_gateway`
 on (or a VPC endpoint) since SSM needs an outbound path to the Systems Manager
 service.
-
-**IMDSv2 enforced.** The launch template's `metadata_options` require session
-tokens (`http_tokens = "required"`) and cap the hop limit at 1 — closing off a
-known SSRF pattern where a vulnerable app could otherwise be tricked into
-fetching the instance's IAM credentials from the metadata service.
 
 **Credentials never leave Secrets Manager.** The database module outputs
 `secret_arn`, never a username or password. Anything that needs the actual
@@ -113,14 +103,6 @@ After apply, check the `app_url` output — refresh it a few times and the
 currently running. Check your inbox for the SNS subscription confirmation
 email before alarms will actually deliver.
 
-## What's intentionally out of scope
-
-- No HTTPS/TLS listener — no real domain to issue an ACM certificate against.
-- No Kubernetes/EKS anywhere in this build (a deliberate correction — earlier
-  drafts of the design notes referenced K8s-style subnet discovery tags that
-  don't apply to this plain EC2/ASG/ALB architecture, and were removed).
-- No SSH access path, by design — see **No SSH, no bastion host** above.
-
 
 # Project 3: Automated CI/CD Deployment Pipeline using AWS Developer Tools with Terraform
 
@@ -147,27 +129,6 @@ This project separates operational management into two isolated Terraform state 
 - **Manual SNS Approval Gate:** Pauses execution after plan creation and notifies administrators via email prior to applying changes to production resources.
 - **Zero-Trust IAM Roles:** Eliminates hardcoded AWS access keys by leveraging IAM Service Roles with scoped permissions.
 
----
-
-## Directory Structure
-
-```
-.
-├── main.tf                 # Root application infrastructure (VPC, EC2, RDS, etc.)
-├── variables.tf            # Root application variables
-├── outputs.tf              # Root application outputs
-│
-└── cicd/                   # CI/CD Pipeline Infrastructure
-    ├── main.tf             # CodePipeline & CodeBuild resources
-    ├── iam.tf              # Fine-grained IAM roles and policies
-    ├── variables.tf        # Pipeline configuration variables
-    ├── terraform.tfvars    # Environment variable settings
-    └── buildspecs/         # Container build specifications
-        ├── plan.yml        # Terraform plan phase configuration
-        └── apply.yml       # Terraform apply phase configuration
-```
-
----
 
 ## Note : CI/CD Terraform State Management
 The CI/CD Terraform configuration currently uses local state, which is excluded from version control through .gitignore already. Remote state management for the CI/CD infrastructure was not implemented and forgetting it was a mistake. This is a known limitation and would be addressed in a future iteration by configuring a remote S3 backend with state locking.
