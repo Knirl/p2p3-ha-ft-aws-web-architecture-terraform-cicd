@@ -1,65 +1,31 @@
-# ---------------------------------------------------------------------------
-# Local .terraform directories — downloaded providers/modules, regenerated
-# by `terraform init`. Never commit this; it's large and machine-specific.
-# Trailing slash (not /*) so this recursively ignores everything nested
-# inside, not just files sitting directly at the top level.
-# ---------------------------------------------------------------------------
+# Terraform
 .terraform/
-# ---------------------------------------------------------------------------
-# State files. Even with a remote S3 backend configured, a local .tfstate
-# can still appear (e.g. before backend migration, or from `terraform
-# state pull` for inspection). State can contain sensitive values
-# (DB passwords, secret ARNs, etc.) — never commit it either way.
-# ---------------------------------------------------------------------------
 *.tfstate
 *.tfstate.*
-
-# ---------------------------------------------------------------------------
-# Crash log files
-# ---------------------------------------------------------------------------
 crash.log
 crash.*.log
 
-# ---------------------------------------------------------------------------
-# Real variable files. These are where actual secrets/values live —
-# project_name, alert_email, and anything else you set locally.
-# The .example file (committed) is the template; this is the real one.
-# ---------------------------------------------------------------------------
-# *.tfvars
+# Terraform variable files
 *.tfvars.json
-!terraform.tfvars.example
 
-# ---------------------------------------------------------------------------
-# Override files — local-only overrides some people use for testing, never
-# meant to be shared/committed.
-# ---------------------------------------------------------------------------
+# Terraform override files
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
 
-# ---------------------------------------------------------------------------
-# CLI configuration files containing credentials
-# ---------------------------------------------------------------------------
+# Terraform CLI configuration
 .terraformrc
 terraform.rc
 
-# ---------------------------------------------------------------------------
-# Plan output files — may contain sensitive values, and are only useful
-# locally between a `plan` and the matching `apply`.
-# ---------------------------------------------------------------------------
+# Terraform plan files
 *.tfplan
 *.tfplan.json
 
-# ---------------------------------------------------------------------------
-# Note: .terraform.lock.hcl is intentionally NOT ignored — it pins exact
-# provider versions/checksums and should be committed for reproducible
-# builds, same idea as committing a package-lock.json or Gemfile.lock.
-# ---------------------------------------------------------------------------
-
-# ---------------------------------------------------------------------------
-# Editor / OS noise
-# ---------------------------------------------------------------------------
+# OS / editor files
 .DS_Store
 .vscode/
 *.swp
+
+# Terraform lock file is intentionally tracked:
+# .terraform.lock.hcl

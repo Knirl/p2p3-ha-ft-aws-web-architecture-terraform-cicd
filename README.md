@@ -169,6 +169,9 @@ This project separates operational management into two isolated Terraform state 
 
 ---
 
+## Note : CI/CD Terraform State Management
+The CI/CD Terraform configuration currently uses local state, which is excluded from version control through .gitignore already. Remote state management for the CI/CD infrastructure was not implemented and forgetting it was a mistake. This is a known limitation and would be addressed in a future iteration by configuring a remote S3 backend with state locking.
+
 ## Deployment Steps
 
 ### Step 1: Deploy Pipeline Infrastructure (`cicd/`)
